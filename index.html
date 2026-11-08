@@ -465,7 +465,7 @@ async function api(action, data) {
   const getActions = ['list', 'overview', 'savings', 'debts', 'fixedIncomes', 'alerts'];
   let res;
   if (getActions.indexOf(action) !== -1) {
-    res = await fetch(url + '?action=' + action + '&key=' + encodeURIComponent(key), { method: 'GET' });
+    res = await fetch(url + '?action=' + action + '&key=' + encodeURIComponent(key) + '&_ts=' + Date.now(), { method: 'GET' });
   } else {
     res = await fetch(url, {
       method: 'POST',
