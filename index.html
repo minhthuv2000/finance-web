@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="vi">
 <head>
@@ -12,97 +11,114 @@
   :root {
     font-family: -apple-system, "Segoe UI", Roboto, system-ui, sans-serif;
     background: #f1f5f9; color: #0f172a;
-    --teal: #0f766e; --teal-dark: #115e59; --red: #dc2626; --green: #16a34a;
+    --teal: #0f766e; --teal-dark: #115e59; --red: #dc2626; --green: #16a34a; --blue: #2563eb; --amber: #d97706;
+    --nav-h: 58px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { max-width: 560px; margin: 0 auto; padding-bottom: 90px; }
+  body { max-width: 560px; margin: 0 auto; padding-bottom: calc(var(--nav-h) + 26px); }
 
   header {
     background: linear-gradient(135deg, var(--teal), #14b8a6);
-    color: #fff; padding: 20px 18px 16px; border-radius: 0 0 20px 20px;
+    color: #fff; padding: 16px 18px 14px; border-radius: 0 0 20px 20px;
     position: sticky; top: 0; z-index: 10;
   }
-  header h1 { font-size: 1.15rem; font-weight: 600; display: flex; justify-content: space-between; align-items: center; }
-  header .gear { cursor: pointer; font-size: 1.2rem; opacity: .9; }
-  .balance-card { margin-top: 14px; }
-  .balance-card .label { font-size: .75rem; opacity: .8; }
-  .balance-card .amount { font-size: 1.7rem; font-weight: 700; letter-spacing: -.5px; }
-  .mini-stats { display: flex; gap: 12px; margin-top: 10px; font-size: .78rem; }
-  .mini-stats div { flex: 1; background: rgba(255,255,255,.14); border-radius: 10px; padding: 8px 10px; }
-  .mini-stats b { display: block; font-size: .95rem; margin-top: 2px; }
+  header h1 { font-size: 1.05rem; font-weight: 600; display: flex; justify-content: space-between; align-items: center; }
+  header .gear { cursor: pointer; font-size: 1.15rem; opacity: .9; }
+  .balance-card .label { font-size: .72rem; opacity: .8; }
+  .balance-card .amount { font-size: 1.55rem; font-weight: 700; letter-spacing: -.5px; }
+  .mini-stats { display: flex; gap: 10px; margin-top: 8px; font-size: .74rem; }
+  .mini-stats div { flex: 1; background: rgba(255,255,255,.14); border-radius: 10px; padding: 6px 9px; }
+  .mini-stats b { display: block; font-size: .9rem; margin-top: 2px; }
 
   main { padding: 14px; }
   .card { background: #fff; border-radius: 14px; padding: 14px; box-shadow: 0 1px 4px rgba(0,0,0,.07); margin-bottom: 14px; }
+  .tab { display: none; }
+  .tab.active { display: block; }
 
-  /* Form thêm giao dịch */
   .seg { display: flex; background: #e2e8f0; border-radius: 10px; padding: 3px; margin-bottom: 12px; }
-  .seg button { flex: 1; border: 0; background: transparent; padding: 8px; border-radius: 8px; font-size: .85rem; font-weight: 600; color: #64748b; cursor: pointer; }
+  .seg button { flex: 1; border: 0; background: transparent; padding: 8px 4px; border-radius: 8px; font-size: .8rem; font-weight: 600; color: #64748b; cursor: pointer; }
   .seg button.active { background: #fff; color: var(--red); box-shadow: 0 1px 3px rgba(0,0,0,.12); }
   .seg[data-mode="income"] button.active { color: var(--green); }
+  .seg[data-mode="transfer"] button.active { color: var(--blue); }
 
-  .amount-wrap { position: relative; margin-bottom: 10px; }
-  .amount-wrap span { position: absolute; left: 12px; top: 12px; color: #94a3b8; font-weight: 600; }
   input[type=number], input[type=text], input[type=date], select {
     width: 100%; padding: 11px 12px; border: 1.5px solid #e2e8f0; border-radius: 10px;
     font-size: .95rem; background: #fff; color: inherit; outline: none;
   }
   input:focus, select:focus { border-color: var(--teal); }
-  #amount { padding-left: 30px; font-size: 1.25rem; font-weight: 700; }
+  #amount { font-size: 1.25rem; font-weight: 700; }
   .row { display: flex; gap: 10px; }
   .row > * { flex: 1; }
   label { display: block; font-size: .72rem; color: #64748b; margin: 0 0 4px 2px; font-weight: 600; }
   .field { margin-bottom: 10px; }
 
-  .btn-primary {
-    width: 100%; padding: 12px; border: 0; border-radius: 10px; background: var(--teal);
-    color: #fff; font-size: .95rem; font-weight: 600; cursor: pointer;
-  }
+  .btn-primary { width: 100%; padding: 12px; border: 0; border-radius: 10px; background: var(--teal); color: #fff; font-size: .95rem; font-weight: 600; cursor: pointer; }
   .btn-primary:active { background: var(--teal-dark); }
   .btn-primary:disabled { opacity: .6; }
+  .btn-small { border: 0; border-radius: 8px; padding: 5px 10px; font-size: .72rem; font-weight: 600; cursor: pointer; }
+  .btn-teal { background: #ccfbf1; color: var(--teal); }
+  .btn-amber { background: #fef3c7; color: var(--amber); }
+  .btn-gray { background: #f1f5f9; color: #64748b; }
+  .btn-red { background: #fee2e2; color: var(--red); }
 
-  /* Danh sách giao dịch */
-  .tx-list { list-style: none; }
-  .tx-item { display: flex; align-items: center; gap: 10px; padding: 10px 2px; border-bottom: 1px solid #f1f5f9; }
-  .tx-item:last-child { border-bottom: 0; }
-  .tx-icon { width: 38px; height: 38px; border-radius: 10px; background: #f1f5f9; display: flex; align-items: center; justify-content: center; font-size: 1.05rem; }
-  .tx-info { flex: 1; min-width: 0; }
-  .tx-info .cat { font-weight: 600; font-size: .85rem; }
-  .tx-info .meta { font-size: .7rem; color: #94a3b8; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .tx-amt { font-weight: 700; font-size: .88rem; }
-  .tx-amt.expense { color: var(--red); }
-  .tx-amt.income { color: var(--green); }
-  .tx-del { border: 0; background: transparent; color: #cbd5e1; cursor: pointer; font-size: 1rem; padding: 4px; }
-  .tx-del:hover { color: var(--red); }
+  /* Thanh tiến độ */
+  .bar { height: 10px; border-radius: 6px; background: #e2e8f0; overflow: hidden; margin-top: 8px; }
+  .bar > div { height: 100%; border-radius: 6px; transition: width .4s; }
+  .bar-green > div { background: var(--green); }
+  .bar-amber > div { background: var(--amber); }
+  .bar-red > div { background: var(--red); }
+
+  /* Danh sách chung */
+  .list { list-style: none; }
+  .item { display: flex; align-items: center; gap: 10px; padding: 10px 2px; border-bottom: 1px solid #f1f5f9; }
+  .item:last-child { border-bottom: 0; }
+  .it-icon { width: 38px; height: 38px; border-radius: 10px; background: #f1f5f9; display: flex; align-items: center; justify-content: center; font-size: 1.05rem; flex-shrink: 0; }
+  .it-info { flex: 1; min-width: 0; }
+  .it-info .name { font-weight: 600; font-size: .85rem; }
+  .it-info .meta { font-size: .7rem; color: #94a3b8; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .it-amt { font-weight: 700; font-size: .85rem; white-space: nowrap; text-align: right; }
+  .it-amt small { display: block; font-weight: 400; font-size: .65rem; color: #94a3b8; }
+  .amt-expense { color: var(--red); }
+  .amt-income { color: var(--green); }
+  .amt-transfer { color: var(--blue); }
+  .x-del { border: 0; background: transparent; color: #cbd5e1; cursor: pointer; font-size: 1rem; padding: 4px; }
+  .x-del:hover { color: var(--red); }
 
   .empty { text-align: center; color: #94a3b8; font-size: .85rem; padding: 18px 0; }
 
+  /* Nav dưới */
+  nav {
+    position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 100%; max-width: 560px; height: var(--nav-h);
+    background: #fff; border-top: 1px solid #e2e8f0; display: flex; z-index: 20;
+  }
+  nav button {
+    flex: 1; border: 0; background: transparent; color: #94a3b8; cursor: pointer;
+    font-size: .62rem; padding: 6px 0 4px; display: flex; flex-direction: column; align-items: center; gap: 2px;
+  }
+  nav button .ic { font-size: 1.25rem; }
+  nav button.active { color: var(--teal); font-weight: 700; }
+
   /* Toast */
   #toast {
-    position: fixed; left: 50%; bottom: 100px; transform: translateX(-50%);
+    position: fixed; left: 50%; bottom: calc(var(--nav-h) + 16px); transform: translateX(-50%);
     background: #1e293b; color: #fff; padding: 10px 18px; border-radius: 20px;
-    font-size: .8rem; opacity: 0; pointer-events: none; transition: opacity .25s; z-index: 99; white-space: nowrap;
+    font-size: .8rem; opacity: 0; pointer-events: none; transition: opacity .25s; z-index: 99; white-space: nowrap; max-width: 92vw; overflow: hidden; text-overflow: ellipsis;
   }
   #toast.show { opacity: 1; }
 
-  /* Nút thêm nhanh cố định */
-  #fab {
-    position: fixed; bottom: 18px; right: max(18px, calc(50% - 280px + 18px));
-    width: 54px; height: 54px; border-radius: 50%; border: 0; background: var(--teal);
-    color: #fff; font-size: 1.6rem; cursor: pointer; box-shadow: 0 4px 12px rgba(15,118,110,.4); z-index: 20;
-  }
+  /* Panel dưới */
+  .panel { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 50; align-items: flex-end; }
+  .panel.open { display: flex; }
+  .panel .sheet { background: #fff; width: 100%; border-radius: 18px 18px 0 0; padding: 18px; max-width: 560px; margin: 0 auto; max-height: 85vh; overflow-y: auto; }
+  .panel h2 { font-size: 1rem; margin-bottom: 12px; }
+  .panel .hint { font-size: .72rem; color: #94a3b8; margin-top: 4px; line-height: 1.4; }
+  .panel .close { width: 100%; margin-top: 8px; padding: 10px; border: 0; background: #e2e8f0; border-radius: 10px; font-weight: 600; cursor: pointer; }
 
-  /* Panel cấu hình */
-  #configPanel { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 50; align-items: flex-end; }
-  #configPanel.open { display: flex; }
-  #configPanel .sheet {
-    background: #fff; width: 100%; border-radius: 18px 18px 0 0; padding: 18px;
-    max-width: 560px; margin: 0 auto;
-  }
-  #configPanel h2 { font-size: 1rem; margin-bottom: 12px; }
-  #configPanel .hint { font-size: .72rem; color: #94a3b8; margin-top: 4px; line-height: 1.4; }
-  #configPanel .close { width: 100%; margin-top: 8px; padding: 10px; border: 0; background: #e2e8f0; border-radius: 10px; font-weight: 600; cursor: pointer; }
-
-  .section-title { font-size: .8rem; font-weight: 700; color: #64748b; margin: 4px 2px 8px; text-transform: uppercase; letter-spacing: .3px; }
+  .section-title { font-size: .8rem; font-weight: 700; color: #64748b; margin: 4px 2px 8px; text-transform: uppercase; letter-spacing: .3px; display: flex; justify-content: space-between; align-items: center; }
+  .section-title button { border: 0; background: var(--teal); color: #fff; font-size: .7rem; padding: 4px 10px; border-radius: 8px; cursor: pointer; font-weight: 600; }
+  .collapse-form { display: none; border-top: 1px dashed #e2e8f0; margin-top: 10px; padding-top: 12px; }
+  .collapse-form.open { display: block; }
 </style>
 </head>
 <body>
@@ -114,34 +130,41 @@
     <div class="amount" id="totalBalance">—</div>
     <div class="mini-stats">
       <div><span>Chi tháng này</span><b id="expenseMonth" style="color:#fecaca">—</b></div>
-      <div><span>Số dư tiền mặt</span><b id="cashBalance">—</b></div>
+      <div><span>Số tài khoản</span><b id="accCount">—</b></div>
     </div>
   </div>
 </header>
 
 <main>
-  <!-- Form nhập nhanh -->
+
+<!-- ================= TAB 1: GIAO DỊCH ================= -->
+<section class="tab active" id="tab-tx">
   <div class="card">
     <div class="seg" id="typeSeg" data-mode="expense">
       <button class="active" data-type="expense">💸 Chi tiêu</button>
       <button data-type="income">💵 Thu nhập</button>
-    </div>
-    <div class="field amount-wrap">
-      <input type="number" id="amount" inputmode="decimal" placeholder="0" min="0" />
+      <button data-type="transfer">🔀 Chuyển tiền</button>
     </div>
     <div class="field">
+      <input type="number" id="amount" inputmode="decimal" placeholder="0" min="0" />
+    </div>
+    <div class="field" id="categoryField">
       <label>Danh mục</label>
       <select id="category"></select>
     </div>
-    <div class="row field">
+    <div class="row field" id="accountRow">
       <div>
-        <label>Tài khoản</label>
+        <label id="fromLabel">Tài khoản</label>
         <select id="account"></select>
       </div>
-      <div>
-        <label>Ngày</label>
-        <input type="date" id="date" />
+      <div id="toAccountCol" style="display:none">
+        <label>Tới tài khoản</label>
+        <select id="toAccount"></select>
       </div>
+    </div>
+    <div class="field">
+      <label>Ngày</label>
+      <input type="date" id="date" />
     </div>
     <div class="field">
       <label>Ghi chú</label>
@@ -150,24 +173,119 @@
     <button class="btn-primary" id="saveBtn">＋ Lưu giao dịch</button>
   </div>
 
-  <!-- Danh sách tháng này -->
+  <div class="card">
+    <div class="section-title">Tài khoản <button id="addAccBtn">＋ Thêm</button></div>
+    <ul class="list" id="accList"></ul>
+  </div>
+
   <div class="card">
     <div class="section-title">Giao dịch tháng này</div>
-    <ul class="tx-list" id="txList"><li class="empty">Đang tải…</li></ul>
+    <ul class="list" id="txList"></ul>
   </div>
+</section>
+
+<!-- ================= TAB 2: TỔNG QUAN ================= -->
+<section class="tab" id="tab-overview">
+  <div class="card">
+    <div class="section-title">Chi tiêu vs hạn mức tháng</div>
+    <div class="row" style="justify-content:space-between;font-size:.8rem;">
+      <span id="ovSpent">—</span><span id="ovLimit">—</span>
+    </div>
+    <div class="bar" id="ovBar"><div style="width:0%"></div></div>
+    <div class="hint" id="ovHint" style="font-size:.7rem;color:#94a3b8;margin-top:6px;">Hạn mức tự tính = trung bình chi tiêu 3 tháng gần nhất.</div>
+  </div>
+  <div class="card">
+    <div class="section-title">Số dư theo tài khoản</div>
+    <ul class="list" id="ovAccounts"></ul>
+  </div>
+  <div class="card">
+    <div class="section-title">Chi theo danh mục (tháng này)</div>
+    <ul class="list" id="ovCategories"></ul>
+  </div>
+</section>
+
+<!-- ================= TAB 3: TIẾT KIỆM ================= -->
+<section class="tab" id="tab-savings">
+  <div class="card">
+    <div class="section-title">Sổ tiết kiệm <button id="addSavBtn">＋ Thêm</button></div>
+    <div class="collapse-form" id="savForm">
+      <div class="row field">
+        <div><label>Ngân hàng</label><input type="text" id="savBank" placeholder="VD: Vietcombank" /></div>
+        <div><label>Lãi suất/năm (%)</label><input type="number" id="savRate" inputmode="decimal" placeholder="VD: 4.7" /></div>
+      </div>
+      <div class="row field">
+        <div><label>Số tiền gửi</label><input type="number" id="savAmount" inputmode="decimal" placeholder="0" /></div>
+        <div><label>Kỳ hạn (tháng)</label><input type="number" id="savTerm" inputmode="numeric" placeholder="VD: 6" /></div>
+      </div>
+      <div class="field"><label>Ngày gửi</label><input type="date" id="savDate" /></div>
+      <button class="btn-primary" id="savSave">Lưu sổ tiết kiệm</button>
+    </div>
+    <ul class="list" id="savList"></ul>
+  </div>
+</section>
+
+<!-- ================= TAB 4: NỢ ================= -->
+<section class="tab" id="tab-debts">
+  <div class="card">
+    <div class="section-title">Nợ phải trả <button id="addDebtBtn">＋ Thêm</button></div>
+    <div class="collapse-form" id="debtForm">
+      <div class="field"><label>Tên khoản nợ</label><input type="text" id="debtName" placeholder="VD: Vay mua xe" /></div>
+      <div class="row field">
+        <div><label>Số gốc</label><input type="number" id="debtPrincipal" inputmode="decimal" placeholder="0" /></div>
+        <div><label>Lãi suất/năm (%)</label><input type="number" id="debtRate" inputmode="decimal" placeholder="VD: 8" /></div>
+      </div>
+      <div class="row field">
+        <div><label>Kỳ hạn (tháng)</label><input type="number" id="debtTerm" inputmode="numeric" placeholder="VD: 12" /></div>
+        <div><label>Ngày bắt đầu</label><input type="date" id="debtStart" /></div>
+      </div>
+      <button class="btn-primary" id="debtSave">Lưu khoản nợ</button>
+    </div>
+    <ul class="list" id="debtList"></ul>
+  </div>
+</section>
+
+<!-- ================= TAB 5: THU NHẬP CỐ ĐỊNH ================= -->
+<section class="tab" id="tab-income">
+  <div class="card">
+    <div class="section-title">Thu nhập cố định <button id="addIncBtn">＋ Thêm</button></div>
+    <div class="hint" style="font-size:.7rem;color:#94a3b8;margin:0 2px 8px;">Hệ thống tự sinh giao dịch thu nhập mỗi khi đến kỳ (cron 7h sáng hàng ngày) và ghi vào tài khoản tiền mặt.</div>
+    <div class="collapse-form" id="incForm">
+      <div class="row field">
+        <div><label>Tên khoản thu</label><input type="text" id="incName" placeholder="VD: Lương, Cho thuê nhà" /></div>
+        <div><label>Số tiền/kỳ</label><input type="number" id="incAmount" inputmode="decimal" placeholder="0" /></div>
+      </div>
+      <div class="row field">
+        <div>
+          <label>Chu kỳ</label>
+          <select id="incCycle"><option value="monthly">Hàng tháng</option><option value="quarterly">Hàng quý</option></select>
+        </div>
+        <div><label>Ngày nhận trong tháng</label><input type="number" id="incDay" inputmode="numeric" min="1" max="31" placeholder="VD: 5" /></div>
+      </div>
+      <div class="field"><label>Áp dụng từ ngày</label><input type="date" id="incStart" /></div>
+      <button class="btn-primary" id="incSave">Lưu khoản thu nhập</button>
+    </div>
+    <ul class="list" id="incList"></ul>
+  </div>
+</section>
+
 </main>
 
-<button id="fab" title="Thêm giao dịch">＋</button>
+<!-- Nav dưới -->
+<nav>
+  <button class="active" data-tab="tx"><span class="ic">✍️</span>Giao dịch</button>
+  <button data-tab="overview"><span class="ic">📊</span>Tổng quan</button>
+  <button data-tab="savings"><span class="ic">💰</span>Tiết kiệm</button>
+  <button data-tab="debts"><span class="ic">🧾</span>Nợ</button>
+  <button data-tab="income"><span class="ic">📈</span>Thu nhập</button>
+</nav>
 
-<div id="configPanel">
+<!-- Panel cấu hình -->
+<div class="panel" id="configPanel">
   <div class="sheet">
     <h2>⚙️ Cấu hình kết nối</h2>
-    <div class="field">
-      <label>URL Apps Script (kết thúc bằng /exec)</label>
-      <input type="text" id="cfgUrl" placeholder="https://script.google.com/macros/s/.../exec" />
-    </div>
-    <div class="field">
-      <label>API Key (chạy generateApiKey() để lấy)</label>
+    <div class="field"><label>URL Apps Script (kết thúc bằng /exec)</label>
+      <input type="text" id="cfgUrl" placeholder="https://script.google.com/macros/s/.../exec" /></div>
+    <div class="field"><label>API Key (chạy generateApiKey() để lấy)</label>
       <input type="text" id="cfgKey" placeholder="Dán API key của bạn" />
       <div class="hint">Key chỉ lưu trên máy bạn (localStorage), không gửi đi đâu khác ngoài Apps Script của chính bạn.</div>
     </div>
@@ -176,24 +294,64 @@
   </div>
 </div>
 
+<!-- Panel tài khoản -->
+<div class="panel" id="accPanel">
+  <div class="sheet">
+    <h2 id="accPanelTitle">＋ Thêm tài khoản</h2>
+    <div class="field"><label>Tên tài khoản</label><input type="text" id="accName" placeholder="VD: Vietcombank, MoMo, Tiền mặt..." /></div>
+    <div class="field"><label>Loại</label>
+      <select id="accType">
+        <option value="cash">💵 Tiền mặt</option>
+        <option value="bank">🏦 Ngân hàng</option>
+        <option value="ewallet">📱 Ví điện tử</option>
+        <option value="saving">🐷 Tiết kiệm</option>
+        <option value="invest">📈 Đầu tư</option>
+      </select>
+    </div>
+    <div class="field"><label>Số dư ban đầu (lúc bắt đầu ghi chép)</label>
+      <input type="number" id="accInit" inputmode="decimal" placeholder="0" />
+      <div class="hint">Nhập số dư tại thời điểm bạn bắt đầu dùng app. Sửa được sau này.</div>
+    </div>
+    <button class="btn-primary" id="accSave">Lưu tài khoản</button>
+    <button class="close" id="accClose">Đóng</button>
+  </div>
+</div>
+
+<!-- Panel trả nợ -->
+<div class="panel" id="payPanel">
+  <div class="sheet">
+    <h2 id="payPanelTitle">🧾 Trả nợ</h2>
+    <div class="field"><label>Số tiền trả kỳ này</label><input type="number" id="payAmount" inputmode="decimal" /></div>
+    <div class="field"><label>Trả từ tài khoản</label><select id="payAccount"></select></div>
+    <div class="field"><label>Ngày</label><input type="date" id="payDate" /></div>
+    <button class="btn-primary" id="paySave">Xác nhận trả</button>
+    <button class="close" id="payClose">Đóng</button>
+  </div>
+</div>
+
 <div id="toast"></div>
 
 <script>
 /* ============================================================
    VÍ CÁ NHÂN - frontend tĩnh, gọi Apps Script backend
-   Không chứa API key trong code; key + URL lưu localStorage.
+   Giai đoạn 2: 5 tab (Giao dịch, Tổng quan, Tiết kiệm, Nợ, Thu nhập)
    ============================================================ */
 
 const LS_URL = 'finance_api_url';
 const LS_KEY = 'finance_api_key';
 
-const EXPENSE_CATS = ['Ăn uống', 'Di chuyển', 'Mua sắm', 'Hóa đơn & tiện ích', 'Sức khỏe', 'Giáo dục', 'Giải trí', 'Góp mục tiêu', 'Khác'];
+const EXPENSE_CATS = ['Ăn uống', 'Di chuyển', 'Mua sắm', 'Hóa đơn & tiện ích', 'Sức khỏe', 'Giáo dục', 'Giải trí', 'Góp mục tiêu', 'Trả nợ', 'Khác'];
 const INCOME_CATS  = ['Lương', 'Thưởng', 'Cho thuê nhà', 'Đầu tư', 'Khác'];
-const CAT_ICONS = { 'Ăn uống':'🍜','Di chuyển':'🛵','Mua sắm':'🛍️','Hóa đơn & tiện ích':'🧾','Sức khỏe':'💊','Giáo dục':'📚','Giải trí':'🎮','Góp mục tiêu':'🎯','Lương':'💼','Thưởng':'🎁','Cho thuê nhà':'🏠','Đầu tư':'📈','Khác':'📝' };
+const CAT_ICONS = { 'Ăn uống':'🍜','Di chuyển':'🛵','Mua sắm':'🛍️','Hóa đơn & tiện ích':'🧾','Sức khỏe':'💊','Giáo dục':'📚','Giải trí':'🎮','Góp mục tiêu':'🎯','Trả nợ':'🧾','Lương':'💼','Thưởng':'🎁','Cho thuê nhà':'🏠','Đầu tư':'📈','Chuyển tiền':'🔀','Khác':'📝' };
+const ACC_TYPE = { cash:{icon:'💵',label:'Tiền mặt'}, bank:{icon:'🏦',label:'Ngân hàng'}, ewallet:{icon:'📱',label:'Ví điện tử'}, saving:{icon:'🐷',label:'Tiết kiệm'}, invest:{icon:'📈',label:'Đầu tư'} };
 
-let state = { accounts: [], transactions: [], mode: 'expense' };
+let state = {
+  tab: 'tx', mode: 'expense', editingAccId: null,
+  accounts: [], transactions: [], summary: null,
+  overview: null, savings: [], debts: [], incomes: []
+};
 
-// ---------- Lưu trữ cấu hình ----------
+// ---------- Cấu hình ----------
 function getCfg() {
   return { url: localStorage.getItem(LS_URL) || '', key: localStorage.getItem(LS_KEY) || '' };
 }
@@ -202,15 +360,13 @@ function saveCfg(url, key) {
   localStorage.setItem(LS_KEY, key.trim());
 }
 
-// ---------- Gọi API ----------
-// POST dùng Content-Type text/plain để tránh preflight CORS; key nằm trong body JSON.
+// ---------- API ----------
 async function api(action, data) {
   const { url, key } = getCfg();
   if (!url || !key) throw new Error('CHUA_CAU_HINH');
   let res;
-  if (action === 'list') {
-    const month = new Date().toISOString().slice(0, 7);
-    res = await fetch(url + '?action=list&month=' + month + '&key=' + encodeURIComponent(key), { method: 'GET' });
+  if (action === 'list' || action === 'overview' || action === 'savings' || action === 'debts' || action === 'fixedIncomes') {
+    res = await fetch(url + '?action=' + action + '&key=' + encodeURIComponent(key), { method: 'GET' });
   } else {
     res = await fetch(url, {
       method: 'POST',
@@ -230,7 +386,7 @@ function toast(msg) {
   t.textContent = msg;
   t.classList.add('show');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2400);
 }
 
 // ---------- Định dạng ----------
@@ -239,87 +395,349 @@ function fmt(n) {
   return new Intl.NumberFormat('vi-VN').format(Math.round(n)) + ' ₫';
 }
 function fmtDate(s) {
-  const d = new Date(s);
+  if (!s) return '';
+  const d = new Date(String(s).slice(0, 10) + 'T00:00:00');
   if (isNaN(d)) return s;
-  return d.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit' });
+  return d.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+}
+function today() { return new Date().toISOString().slice(0, 10); }
+function esc(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g,
+    c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+}
+function accountName(id) {
+  const a = state.accounts.find(x => x.Id === id);
+  return a ? a.Name : id;
 }
 
-// ---------- Render ----------
-function renderAccountsSelects() {
-  const accSel = document.getElementById('account');
-  accSel.innerHTML = state.accounts
-    .map(a => '<option value="' + esc(a.Id) + '">' + esc(a.Name) + '</option>').join('');
+// ---------- Tải dữ liệu ----------
+async function loadAll() {
+  const results = await Promise.allSettled([
+    api('list'), api('overview'), api('savings'), api('debts'), api('fixedIncomes')
+  ]);
+  if (results[0].status === 'fulfilled') {
+    const r = results[0].value;
+    state.accounts = r.accounts || [];
+    state.transactions = r.transactions || [];
+    state.summary = r.summary;
+    renderAccountSelects(); renderAccounts(); renderSummary(); renderTxList();
+  } else if (results[0].reason.message === 'CHUA_CAU_HINH') {
+    document.getElementById('txList').innerHTML =
+      '<li class="empty">Chưa cấu hình. Nhấn ⚙️ để nhập URL Apps Script và API key.</li>';
+  }
+  if (results[1].status === 'fulfilled') { state.overview = results[1].value; renderOverview(); }
+  if (results[2].status === 'fulfilled') { state.savings = results[2].value.items; renderSavings(); }
+  if (results[3].status === 'fulfilled') { state.debts = results[3].value.items; renderDebts(); }
+  if (results[4].status === 'fulfilled') { state.incomes = results[4].value.items; renderIncomes(); }
 }
+async function refresh() { try { await loadAll(); } catch (e) { toast('❌ ' + e.message); } }
 
+// ---------- Render: form giao dịch ----------
 function renderCategories() {
-  const catSel = document.getElementById('category');
   const cats = state.mode === 'expense' ? EXPENSE_CATS : INCOME_CATS;
-  catSel.innerHTML = cats.map(c => '<option value="' + esc(c) + '">' + esc(c) + '</option>').join('');
+  document.getElementById('category').innerHTML =
+    cats.map(c => '<option value="' + esc(c) + '">' + esc(c) + '</option>').join('');
+}
+function applyMode() {
+  const isTransfer = state.mode === 'transfer';
+  document.getElementById('categoryField').style.display = isTransfer ? 'none' : '';
+  document.getElementById('toAccountCol').style.display = isTransfer ? '' : 'none';
+  document.getElementById('fromLabel').textContent = isTransfer ? 'Từ tài khoản' : 'Tài khoản';
+}
+function renderAccountSelects() {
+  const opts = state.accounts
+    .map(a => '<option value="' + esc(a.Id) + '">' + esc(a.Name) + '</option>').join('');
+  document.getElementById('account').innerHTML = opts;
+  document.getElementById('toAccount').innerHTML = opts;
+  document.getElementById('payAccount').innerHTML = opts;
 }
 
+// ---------- Render: tài khoản & summary ----------
+function renderAccounts() {
+  const ul = document.getElementById('accList');
+  document.getElementById('accCount').textContent = state.accounts.length;
+  if (!state.accounts.length) {
+    ul.innerHTML = '<li class="empty">Chưa có tài khoản. Bấm “＋ Thêm” để tạo.</li>';
+    return;
+  }
+  const bal = state.summary ? state.summary.perAccount : {};
+  ul.innerHTML = state.accounts.map(a => {
+    const t = ACC_TYPE[a.Type] || ACC_TYPE.cash;
+    const b = bal[a.Id] != null ? bal[a.Id] : a.InitialBalance;
+    return '<li class="item">' +
+      '<div class="it-icon">' + t.icon + '</div>' +
+      '<div class="it-info"><div class="name">' + esc(a.Name) + '</div>' +
+      '<div class="meta">' + fmt(b) + '</div></div>' +
+      '<button class="btn-small btn-gray" data-edit="' + esc(a.Id) + '">✏️</button>' +
+      '</li>';
+  }).join('');
+  ul.querySelectorAll('[data-edit]').forEach(btn => {
+    btn.onclick = () => openAccPanel(btn.dataset.edit);
+  });
+}
 function renderSummary() {
   const s = state.summary;
   if (!s) return;
   document.getElementById('totalBalance').textContent = fmt(s.totalBalance);
   document.getElementById('expenseMonth').textContent = fmt(s.expenseThisMonth);
-  const cash = state.accounts.find(a => a.Type === 'cash');
-  document.getElementById('cashBalance').textContent = cash ? fmt(s.perAccount[cash.Id]) : '—';
 }
 
+// ---------- Render: giao dịch ----------
 function renderTxList() {
   const ul = document.getElementById('txList');
   if (!state.transactions.length) {
     ul.innerHTML = '<li class="empty">Chưa có giao dịch nào trong tháng.</li>';
     return;
   }
-  ul.innerHTML = state.transactions.map(t =>
-    '<li class="tx-item">' +
-      '<div class="tx-icon">' + (CAT_ICONS[t.Category] || '📝') + '</div>' +
-      '<div class="tx-info">' +
-        '<div class="cat">' + esc(t.Category) + '</div>' +
-        '<div class="meta">' + fmtDate(t.Date) + ' · ' + esc(accountName(t.AccountId)) +
-          (t.Note ? ' · ' + esc(t.Note) : '') + '</div>' +
+  ul.innerHTML = state.transactions.map(t => {
+    let meta, cls, txt, icon;
+    if (t.Type === 'transfer') {
+      meta = fmtDate(t.Date) + ' · ' + esc(accountName(t.AccountId)) + ' → ' + esc(accountName(t.ToAccountId));
+      cls = 'amt-transfer'; txt = fmt(t.Amount); icon = '🔀';
+    } else {
+      meta = fmtDate(t.Date) + ' · ' + esc(accountName(t.AccountId)) + (t.Note ? ' · ' + esc(t.Note) : '');
+      cls = t.Type === 'expense' ? 'amt-expense' : 'amt-income';
+      txt = (t.Type === 'expense' ? '−' : '+') + fmt(t.Amount);
+      icon = CAT_ICONS[t.Category] || '📝';
+    }
+    return '<li class="item">' +
+      '<div class="it-icon">' + icon + '</div>' +
+      '<div class="it-info"><div class="name">' + esc(t.Type === 'transfer' ? 'Chuyển tiền' : t.Category) + '</div>' +
+      '<div class="meta">' + meta + '</div></div>' +
+      '<div class="it-amt ' + cls + '">' + txt + '</div>' +
+      '<button class="x-del" data-id="' + esc(t.Id) + '">✕</button></li>';
+  }).join('');
+  ul.querySelectorAll('.x-del').forEach(b => { b.onclick = () => deleteTx(b.dataset.id); });
+}
+
+// ---------- Render: tổng quan ----------
+function renderOverview() {
+  const o = state.overview;
+  if (!o) return;
+  const bar = document.getElementById('ovBar');
+  const pct = o.limit > 0 ? Math.min(100, o.spentThisMonth / o.limit * 100) : 0;
+  document.getElementById('ovSpent').textContent = 'Đã chi: ' + fmt(o.spentThisMonth);
+  document.getElementById('ovLimit').textContent = o.limit > 0 ? 'Hạn mức: ' + fmt(o.limit) : 'Hạn mức: chưa có dữ liệu';
+  bar.className = 'bar ' + (o.limit === 0 ? '' : pct < 70 ? 'bar-green' : pct < 100 ? 'bar-amber' : 'bar-red');
+  bar.firstElementChild.style.width = pct + '%';
+  document.getElementById('ovHint').textContent = o.limit > 0
+    ? 'Hạn mức tự tính = trung bình chi tiêu 3 tháng gần nhất. ' + (pct >= 100 ? '⚠️ Đã vượt hạn mức!' : 'Còn ' + fmt(Math.max(0, o.limit - o.spentThisMonth)) + ' nữa.')
+    : 'Chưa đủ dữ liệu tháng trước để tính hạn mức. Dùng tiếp vài tháng là có.';
+
+  const bal = o.perAccount || {};
+  document.getElementById('ovAccounts').innerHTML = state.accounts.map(a => {
+    const t = ACC_TYPE[a.Type] || ACC_TYPE.cash;
+    return '<li class="item"><div class="it-icon">' + t.icon + '</div>' +
+      '<div class="it-info"><div class="name">' + esc(a.Name) + '</div></div>' +
+      '<div class="it-amt">' + fmt(bal[a.Id]) + '</div></li>';
+  }).join('') || '<li class="empty">Chưa có tài khoản.</li>';
+
+  const cats = Object.entries(o.perCategory || {}).sort((a, b) => b[1] - a[1]).slice(0, 6);
+  const maxC = cats.length ? cats[0][1] : 1;
+  document.getElementById('ovCategories').innerHTML = cats.length
+    ? cats.map(([c, v]) =>
+        '<li class="item"><div class="it-info">' +
+        '<div class="name">' + (CAT_ICONS[c] || '📝') + ' ' + esc(c) + '</div>' +
+        '<div class="bar" style="margin-top:4px;height:6px;"><div style="width:' + Math.round(v / maxC * 100) + '%;background:#0f766e;"></div></div>' +
+        '</div><div class="it-amt">' + fmt(v) + '</div></li>').join('')
+    : '<li class="empty">Chưa có chi tiêu nào tháng này.</li>';
+}
+
+// ---------- Render: tiết kiệm ----------
+function renderSavings() {
+  const ul = document.getElementById('savList');
+  if (!state.savings.length) {
+    ul.innerHTML = '<li class="empty">Chưa có sổ tiết kiệm nào.</li>';
+    return;
+  }
+  ul.innerHTML = state.savings.map(s => {
+    const st = s.Status === 'withdrawn'
+      ? '<span style="color:#94a3b8">Đã rút ' + fmtDate(s.WithdrawnDate) + '</span>'
+      : (s.MaturityDate <= today() ? '<span style="color:var(--green)">✅ Đáo hạn</span>' : 'Đáo hạn: ' + fmtDate(s.MaturityDate));
+    return '<li class="item">' +
+      '<div class="it-icon">💰</div>' +
+      '<div class="it-info">' +
+        '<div class="name">' + esc(s.BankName) + ' · ' + fmt(s.Amount) + '</div>' +
+        '<div class="meta">' + s.TermMonths + ' tháng · ' + s.AnnualRate + '%/năm · ' + st + '</div>' +
+        '<div class="meta">Nhận đủ hạn: <b>' + fmt(s.MaturityValue) + '</b> (lãi ' + fmt(s.MaturityInterest) + ')</div>' +
       '</div>' +
-      '<div class="tx-amt ' + (t.Type === 'expense' ? 'expense' : 'income') + '">' +
-        (t.Type === 'expense' ? '−' : '+') + fmt(t.Amount) + '</div>' +
-      '<button class="tx-del" data-id="' + esc(t.Id) + '" title="Xóa">✕</button>' +
-    '</li>').join('');
-  ul.querySelectorAll('.tx-del').forEach(btn => {
-    btn.onclick = () => deleteTx(btn.dataset.id);
-  });
+      (s.Status === 'active'
+        ? '<button class="btn-small btn-amber" data-withdraw="' + esc(s.Id) + '">Rút</button>' : '') +
+      '<button class="x-del" data-del-sav="' + esc(s.Id) + '">✕</button>' +
+      '</li>';
+  }).join('');
+  ul.querySelectorAll('[data-withdraw]').forEach(b => { b.onclick = () => withdrawSaving(b.dataset.withdraw); });
+  ul.querySelectorAll('[data-del-sav]').forEach(b => { b.onclick = () => deleteSaving(b.dataset.delSav); });
 }
 
-function accountName(id) {
-  const a = state.accounts.find(x => x.Id === id);
-  return a ? a.Name : id;
-}
-
-function esc(s) {
-  return String(s == null ? '' : s).replace(/[&<>"']/g,
-    c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
-}
-
-// ---------- Hành động ----------
-async function load() {
+async function withdrawSaving(id) {
+  const s = state.savings.find(x => x.Id === id);
+  const dateStr = prompt('Rút sổ "' + s.BankName + '". Nhập ngày rút (YYYY-MM-DD):', today());
+  if (!dateStr) return;
+  if (!confirm('Xác nhận rút sổ ' + s.BankName + ' ngày ' + dateStr + '? Lãi sẽ tính theo lãi suất không kỳ hạn 0.5%/năm cho số ngày đã gửi.')) return;
   try {
-    const r = await api('list');
-    state.accounts = r.accounts || [];
-    state.transactions = r.transactions || [];
-    state.summary = r.summary;
-    renderAccountsSelects();
-    renderSummary();
-    renderTxList();
+    const r = await api('withdrawSaving', { id: id, date: dateStr });
+    let msg = '✅ Đã rút. Nhận về: ' + fmt(r.received);
+    if (r.wasEarly && r.interestLost > 0) {
+      msg += '\n⚠️ Lãi mất so với gửi đủ hạn: ' + fmt(r.interestLost) +
+        '\n(Đã gửi ' + r.days + ' ngày, lãi nhận ' + fmt(r.earlyInterest) + ' thay vì ' + fmt(r.fullInterest) + ')';
+    } else {
+      msg += '\n🎉 Sổ đã đủ hạn, nhận trọn lãi ' + fmt(r.fullInterest) + '.';
+    }
+    alert(msg);
+    refresh();
   } catch (e) {
-    document.getElementById('txList').innerHTML =
-      '<li class="empty">' + (e.message === 'CHUA_CAU_HINH'
-        ? 'Chưa cấu hình. Nhấn ⚙️ để nhập URL Apps Script và API key.'
-        : 'Lỗi tải dữ liệu: ' + esc(e.message)) + '</li>';
+    toast('❌ Lỗi: ' + e.message);
   }
 }
+async function deleteSaving(id) {
+  if (!confirm('Xóa sổ tiết kiệm này khỏi danh sách?')) return;
+  try { await api('deleteSaving', { id: id }); toast('🗑️ Đã xóa'); refresh(); }
+  catch (e) { toast('❌ ' + e.message); }
+}
+async function saveSaving() {
+  const d = {
+    bankName: document.getElementById('savBank').value.trim(),
+    amount: Number(document.getElementById('savAmount').value),
+    termMonths: Number(document.getElementById('savTerm').value),
+    annualRate: Number(document.getElementById('savRate').value),
+    depositDate: document.getElementById('savDate').value
+  };
+  if (!d.bankName || !d.amount || !d.termMonths) { toast('Nhập đủ ngân hàng, số tiền, kỳ hạn'); return; }
+  try {
+    await api('addSaving', d);
+    toast('✅ Đã thêm sổ tiết kiệm');
+    document.getElementById('savForm').classList.remove('open');
+    refresh();
+  } catch (e) { toast('❌ ' + e.message); }
+}
 
+// ---------- Render: nợ ----------
+function renderDebts() {
+  const ul = document.getElementById('debtList');
+  if (!state.debts.length) {
+    ul.innerHTML = '<li class="empty">Không có khoản nợ nào. Tuyệt! 🎉</li>';
+    return;
+  }
+  ul.innerHTML = state.debts.map(d => {
+    const done = d.Status === 'done' || d.Remaining <= 0;
+    const overdue = !done && d.NextDue && d.NextDue < today();
+    return '<li class="item">' +
+      '<div class="it-icon">🧾</div>' +
+      '<div class="it-info">' +
+        '<div class="name">' + esc(d.Name) + (done ? ' ✅' : '') + '</div>' +
+        '<div class="meta">Gốc ' + fmt(d.Principal) + ' · ' + d.AnnualRate + '%/năm · ' + d.TermMonths + ' tháng</div>' +
+        '<div class="meta">' + (done ? 'Đã trả xong' :
+          'Trả/kỳ: ' + fmt(d.MonthlyPayment) + ' · ' +
+          (overdue ? '<span style="color:var(--red)">⚠️ Q hạn ' + fmtDate(d.NextDue) + '</span>' : 'Kỳ tới: ' + fmtDate(d.NextDue))) +
+        '</div>' +
+        '<div class="bar ' + (d.Progress >= 100 ? 'bar-green' : d.Progress >= 50 ? 'bar-amber' : 'bar-red') + '" style="margin-top:4px;height:6px;">' +
+          '<div style="width:' + d.Progress + '%"></div></div>' +
+        '<div class="meta">Đã trả ' + d.Progress + '% · Còn lại <b>' + fmt(d.Remaining) + '</b></div>' +
+      '</div>' +
+      (!done ? '<button class="btn-small btn-teal" data-pay="' + esc(d.Id) + '">Trả</button>' : '') +
+      '<button class="x-del" data-del-debt="' + esc(d.Id) + '">✕</button>' +
+      '</li>';
+  }).join('');
+  ul.querySelectorAll('[data-pay]').forEach(b => { b.onclick = () => openPayPanel(b.dataset.pay); });
+  ul.querySelectorAll('[data-del-debt]').forEach(b => { b.onclick = () => deleteDebt(b.dataset.delDebt); });
+}
+let payingDebtId = null;
+function openPayPanel(id) {
+  const d = state.debts.find(x => x.Id === id);
+  payingDebtId = id;
+  document.getElementById('payPanelTitle').textContent = '🧾 Trả nợ: ' + d.Name;
+  document.getElementById('payAmount').value = d.MonthlyPayment;
+  document.getElementById('payDate').value = today();
+  document.getElementById('payAccount').value =
+    (state.accounts.find(a => a.Type === 'bank') || state.accounts[0] || {}).Id || '';
+  document.getElementById('payPanel').classList.add('open');
+}
+async function confirmPay() {
+  try {
+    const r = await api('payDebt', {
+      id: payingDebtId,
+      amount: Number(document.getElementById('payAmount').value),
+      accountId: document.getElementById('payAccount').value,
+      date: document.getElementById('payDate').value
+    });
+    document.getElementById('payPanel').classList.remove('open');
+    toast(r.done ? '🎉 Đã trả xong khoản nợ!' : '✅ Đã ghi nhận trả ' + fmt(Number(document.getElementById('payAmount').value)));
+    refresh();
+  } catch (e) { toast('❌ ' + e.message); }
+}
+async function deleteDebt(id) {
+  if (!confirm('Xóa khoản nợ này? (Giao dịch "Trả nợ" đã tạo vẫn giữ nguyên)')) return;
+  try { await api('deleteDebt', { id: id }); toast('🗑️ Đã xóa'); refresh(); }
+  catch (e) { toast('❌ ' + e.message); }
+}
+async function saveDebt() {
+  const d = {
+    name: document.getElementById('debtName').value.trim(),
+    principal: Number(document.getElementById('debtPrincipal').value),
+    annualRate: Number(document.getElementById('debtRate').value),
+    termMonths: Number(document.getElementById('debtTerm').value),
+    startDate: document.getElementById('debtStart').value
+  };
+  if (!d.name || !d.principal || !d.termMonths) { toast('Nhập đủ tên, số gốc, kỳ hạn'); return; }
+  try {
+    await api('addDebt', d);
+    toast('✅ Đã thêm khoản nợ');
+    document.getElementById('debtForm').classList.remove('open');
+    refresh();
+  } catch (e) { toast('❌ ' + e.message); }
+}
+
+// ---------- Render: thu nhập cố định ----------
+function renderIncomes() {
+  const ul = document.getElementById('incList');
+  if (!state.incomes.length) {
+    ul.innerHTML = '<li class="empty">Chưa có khoản thu nhập cố định nào.</li>';
+    return;
+  }
+  ul.innerHTML = state.incomes.map(f =>
+    '<li class="item">' +
+    '<div class="it-icon">📈</div>' +
+    '<div class="it-info">' +
+      '<div class="name">' + esc(f.Name) + '</div>' +
+      '<div class="meta">' + fmt(f.Amount) + '/' + (f.Cycle === 'quarterly' ? 'quý' : 'tháng') +
+        ' · ngày ' + f.DayOfMonth + ' hàng tháng' + (f.Active ? '' : ' · ⏸ đã tắt') + '</div>' +
+    '</div>' +
+    '<button class="x-del" data-del-inc="' + esc(f.Id) + '">✕</button>' +
+    '</li>').join('');
+  ul.querySelectorAll('[data-del-inc]').forEach(b => {
+    b.onclick = async () => {
+      if (!confirm('Xóa khoản thu nhập cố định này?')) return;
+      try { await api('deleteFixedIncome', { id: b.dataset.delInc }); toast('🗑️ Đã xóa'); refresh(); }
+      catch (e) { toast('❌ ' + e.message); }
+    };
+  });
+}
+async function saveIncome() {
+  const d = {
+    name: document.getElementById('incName').value.trim(),
+    amount: Number(document.getElementById('incAmount').value),
+    cycle: document.getElementById('incCycle').value,
+    dayOfMonth: Number(document.getElementById('incDay').value) || 1,
+    startDate: document.getElementById('incStart').value
+  };
+  if (!d.name || !d.amount) { toast('Nhập tên và số tiền'); return; }
+  try {
+    await api('addFixedIncome', d);
+    toast('✅ Đã thêm. Đến kỳ hệ thống tự sinh giao dịch thu nhập.');
+    document.getElementById('incForm').classList.remove('open');
+    refresh();
+  } catch (e) { toast('❌ ' + e.message); }
+}
+
+// ---------- Giao dịch ----------
 async function saveTx() {
   const amount = Number(document.getElementById('amount').value);
   if (!amount || amount <= 0) { toast('Nhập số tiền hợp lệ'); return; }
+  if (state.mode === 'transfer' &&
+      document.getElementById('account').value === document.getElementById('toAccount').value) {
+    toast('Hai tài khoản phải khác nhau'); return;
+  }
   const btn = document.getElementById('saveBtn');
   btn.disabled = true;
   try {
@@ -327,51 +745,77 @@ async function saveTx() {
       date: document.getElementById('date').value,
       amount: amount,
       type: state.mode,
-      category: document.getElementById('category').value,
+      category: state.mode === 'transfer' ? 'Chuyển tiền' : document.getElementById('category').value,
       accountId: document.getElementById('account').value,
+      toAccountId: state.mode === 'transfer' ? document.getElementById('toAccount').value : '',
       note: document.getElementById('note').value.trim()
     });
     document.getElementById('amount').value = '';
     document.getElementById('note').value = '';
     toast('✅ Đã lưu vào Google Sheet');
-    await load();
-  } catch (e) {
-    toast('❌ Lỗi: ' + e.message);
-  } finally {
-    btn.disabled = false;
-  }
+    refresh();
+  } catch (e) { toast('❌ Lỗi: ' + e.message); }
+  finally { btn.disabled = false; }
 }
-
 async function deleteTx(id) {
   if (!confirm('Xóa giao dịch này?')) return;
-  try {
-    await api('deleteTransaction', { id: id });
-    toast('🗑️ Đã xóa');
-    await load();
-  } catch (e) {
-    toast('❌ Lỗi: ' + e.message);
-  }
+  try { await api('deleteTransaction', { id: id }); toast('🗑️ Đã xóa'); refresh(); }
+  catch (e) { toast('❌ ' + e.message); }
 }
 
-// ---------- Sự kiện ----------
+// ---------- Panel tài khoản ----------
+function openAccPanel(accId) {
+  state.editingAccId = accId || null;
+  if (accId) {
+    const a = state.accounts.find(x => x.Id === accId);
+    document.getElementById('accPanelTitle').textContent = '✏️ Sửa tài khoản';
+    document.getElementById('accName').value = a.Name;
+    document.getElementById('accType').value = a.Type || 'cash';
+    document.getElementById('accInit').value = a.InitialBalance || 0;
+  } else {
+    document.getElementById('accPanelTitle').textContent = '＋ Thêm tài khoản';
+    document.getElementById('accName').value = '';
+    document.getElementById('accType').value = 'bank';
+    document.getElementById('accInit').value = '';
+  }
+  document.getElementById('accPanel').classList.add('open');
+}
+async function saveAccount() {
+  const name = document.getElementById('accName').value.trim();
+  const type = document.getElementById('accType').value;
+  const init = Number(document.getElementById('accInit').value) || 0;
+  if (!name) { toast('Nhập tên tài khoản'); return; }
+  try {
+    if (state.editingAccId) await api('updateAccount', { id: state.editingAccId, name: name, type: type, initialBalance: init });
+    else await api('addAccount', { name: name, type: type, initialBalance: init });
+    toast('✅ Đã lưu tài khoản');
+    document.getElementById('accPanel').classList.remove('open');
+    refresh();
+  } catch (e) { toast('❌ ' + e.message); }
+}
+
+// ---------- Tab & sự kiện ----------
+function setTab(tab) {
+  state.tab = tab;
+  document.querySelectorAll('.tab').forEach(s => s.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  document.querySelectorAll('nav button').forEach(b =>
+    b.classList.toggle('active', b.dataset.tab === tab));
+}
+document.querySelectorAll('nav button').forEach(b => { b.onclick = () => setTab(b.dataset.tab); });
+
 document.querySelectorAll('#typeSeg button').forEach(b => {
   b.onclick = () => {
     document.querySelectorAll('#typeSeg button').forEach(x => x.classList.remove('active'));
     b.classList.add('active');
     state.mode = b.dataset.type;
     document.getElementById('typeSeg').dataset.mode = state.mode;
-    renderCategories();
+    applyMode();
+    if (state.mode !== 'transfer') renderCategories();
   };
 });
-
 document.getElementById('saveBtn').onclick = saveTx;
 document.getElementById('amount').addEventListener('keydown', e => { if (e.key === 'Enter') saveTx(); });
-
-document.getElementById('gear').onclick = openConfig;
-document.getElementById('fab').onclick = () => {
-  document.getElementById('amount').focus();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-};
 
 function openConfig() {
   const { url, key } = getCfg();
@@ -379,28 +823,53 @@ function openConfig() {
   document.getElementById('cfgKey').value = key;
   document.getElementById('configPanel').classList.add('open');
 }
-document.getElementById('cfgClose').onclick = () =>
-  document.getElementById('configPanel').classList.remove('open');
-document.getElementById('configPanel').onclick = e => {
-  if (e.target.id === 'configPanel') e.target.classList.remove('open');
-};
+document.getElementById('gear').onclick = openConfig;
+document.querySelectorAll('.panel').forEach(p => {
+  p.addEventListener('click', e => { if (e.target === p) p.classList.remove('open'); });
+});
+document.getElementById('cfgClose').onclick = () => document.getElementById('configPanel').classList.remove('open');
+document.getElementById('accClose').onclick = () => document.getElementById('accPanel').classList.remove('open');
+document.getElementById('payClose').onclick = () => document.getElementById('payPanel').classList.remove('open');
 document.getElementById('cfgSave').onclick = () => {
   saveCfg(document.getElementById('cfgUrl').value, document.getElementById('cfgKey').value);
   document.getElementById('configPanel').classList.remove('open');
   toast('✅ Đã lưu cấu hình');
-  load();
+  refresh();
 };
+document.getElementById('accSave').onclick = saveAccount;
+document.getElementById('addAccBtn').onclick = () => openAccPanel(null);
+
+// Form bật/tắt
+document.getElementById('addSavBtn').onclick = () => {
+  const f = document.getElementById('savForm');
+  document.getElementById('savDate').value = today();
+  f.classList.toggle('open');
+};
+document.getElementById('savSave').onclick = saveSaving;
+document.getElementById('addDebtBtn').onclick = () => {
+  const f = document.getElementById('debtForm');
+  document.getElementById('debtStart').value = today();
+  f.classList.toggle('open');
+};
+document.getElementById('debtSave').onclick = saveDebt;
+document.getElementById('addIncBtn').onclick = () => {
+  const f = document.getElementById('incForm');
+  document.getElementById('incStart').value = today();
+  f.classList.toggle('open');
+};
+document.getElementById('incSave').onclick = saveIncome;
+document.getElementById('paySave').onclick = confirmPay;
 
 // ---------- Khởi động ----------
-document.getElementById('date').value = new Date().toISOString().slice(0, 10);
+document.getElementById('date').value = today();
 renderCategories();
-load();
+applyMode();
+loadAll();
 
-// Đăng ký service worker để chạy PWA offline-shell
+// PWA
 if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
   navigator.serviceWorker.register('sw.js').catch(function () {});
 }
 </script>
-<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" nonce="zCq9edfLxQJzShPQj5iGcA==" data-cf-beacon='{"version":"2024.11.0","token":"36b4216ae2dc4d5488c249161e71fe1e","spa":2}' crossorigin="anonymous"></script>
 </body>
 </html>
