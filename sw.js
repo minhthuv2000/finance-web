@@ -1,5 +1,5 @@
 // Service worker tối giản: cache giao diện để mở nhanh, KHÔNG bao giờ cache API.
-const CACHE = 'vi-canhan-v3';
+const CACHE = 'vi-canhan-v5';
 const ASSETS = ['./', 'index.html', 'manifest.json', 'icon-192.png', 'icon-512.png'];
 
 self.addEventListener('install', e => {
