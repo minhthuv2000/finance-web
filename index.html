@@ -141,6 +141,43 @@
   .alert-sev { width: 4px; border-radius: 3px; flex-shrink: 0; }
   .alert-item .t { font-weight: 700; font-size: .82rem; }
   .alert-item .m { font-size: .72rem; color: #64748b; margin-top: 2px; line-height: 1.4; }
+
+  .month-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .month-nav b { font-size: .95rem; color: var(--teal); }
+  .month-nav button {
+    border: 0; background: #e2e8f0; color: #334155; width: 36px; height: 32px;
+    border-radius: 9px; cursor: pointer; font-size: .8rem;
+  }
+  .cal-head { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; margin-bottom: 3px; }
+  .cal-head span { text-align: center; font-size: .62rem; font-weight: 700; color: #94a3b8; }
+  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
+  .cal-day {
+    background: #f8fafc; border-radius: 8px; min-height: 52px; padding: 4px 3px;
+    display: flex; flex-direction: column; justify-content: space-between; cursor: pointer;
+    border: 1.5px solid transparent; text-align: left;
+  }
+  .cal-day.dim { background: transparent; min-height: 0; visibility: hidden; }
+  .cal-day .d { font-size: .66rem; font-weight: 700; color: #64748b; }
+  .cal-day.today { border-color: var(--teal); }
+  .cal-day.selected { background: #ccfbf1; border-color: var(--teal); }
+  .cal-day .amt { font-size: .56rem; font-weight: 700; line-height: 1.25; overflow: hidden; }
+  .cal-day .amt.exp { color: var(--red); }
+  .cal-day .amt.inc { color: var(--green); }
+
+  .ob-box {
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px;
+    background: #fef3c7; border-radius: 10px; padding: 8px 10px; margin-top: 10px; font-size: .72rem; color: #92400e;
+  }
+  .ob-box b { color: #b45309; }
+
+  .trend { display: flex; align-items: flex-end; gap: 3px; height: 120px; padding-top: 6px; }
+  .trend .tcol { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 0; }
+  .trend .bars { display: flex; align-items: flex-end; gap: 1px; height: 84px; width: 100%; }
+  .trend .bars i { display: block; flex: 1; border-radius: 3px 3px 0 0; min-height: 2px; }
+  .trend .bi { background: var(--green); }
+  .trend .be { background: var(--red); }
+  .trend .lbl { font-size: .52rem; color: #94a3b8; font-weight: 600; }
+  .trend .val { font-size: .52rem; color: #64748b; white-space: nowrap; }
 </style>
 </head>
 <body>
@@ -225,6 +262,61 @@
   </div>
 </section>
 
+<!-- ================= TAB 2.5: THỐNG KÊ (LỊCH + BÁO CÁO) ================= -->
+<section class="tab" id="tab-stats">
+  <div class="card">
+    <div class="month-nav">
+      <button id="calPrev">◀</button>
+      <b id="calLabel">—</b>
+      <button id="calNext">▶</button>
+    </div>
+    <div class="cal-head">
+      <span>Hai</span><span>Ba</span><span>Tư</span><span>Năm</span><span>Sáu</span><span>Bảy</span><span>CN</span>
+    </div>
+    <div class="cal-grid" id="calGrid"></div>
+    <div class="hint" style="font-size:.7rem;color:#94a3b8;margin-top:6px;">Bấm vào một ngày để xem giao dịch ngày đó bên dưới.</div>
+  </div>
+
+  <div class="card">
+    <div class="section-title">Chỉ số tháng <button id="csvBtn">⬇ Xuất CSV</button></div>
+    <div class="stats3">
+      <div><span>Thu thật</span><b id="rpIncome" style="color:var(--green)">—</b></div>
+      <div><span>Chi thật</span><b id="rpExpense" style="color:var(--red)">—</b></div>
+      <div><span>Ròng</span><b id="rpNet">—</b></div>
+    </div>
+    <div class="ob-box" id="rpOnBehalf">
+      <span>🤝 Trả hộ: đã trả hộ <b id="obPaid">—</b> · đã nhận lại <b id="obReceived">—</b></span>
+      <b id="obOutstanding">Chờ nhận: —</b>
+    </div>
+    <div class="hint" style="font-size:.7rem;color:#94a3b8;margin-top:4px;">"Trả hộ / Nhận trả hộ" không tính vào thu chi thống kê, nhưng số dư tài khoản vẫn phản ánh đúng tiền đã ra/vào.</div>
+  </div>
+
+  <div class="card">
+    <div class="section-title">Chi theo danh mục</div>
+    <ul class="list" id="rpExpCats"></ul>
+  </div>
+
+  <div class="card">
+    <div class="section-title">Thu theo danh mục</div>
+    <ul class="list" id="rpIncCats"></ul>
+  </div>
+
+  <div class="card">
+    <div class="section-title">Xu hướng 12 tháng (thu xanh · chi đỏ)</div>
+    <div class="trend" id="trend"></div>
+  </div>
+
+  <div class="card">
+    <div class="section-title">Giao dịch lớn nhất tháng</div>
+    <ul class="list" id="rpTop"></ul>
+  </div>
+
+  <div class="card">
+    <div class="section-title" id="dayListTitle">Giao dịch trong tháng</div>
+    <ul class="list" id="dayList"></ul>
+  </div>
+</section>
+
 <!-- ================= TAB 3: TIẾT KIỆM ================= -->
 <section class="tab" id="tab-savings">
   <div class="card">
@@ -274,20 +366,13 @@
   </div>
 
   <div class="card">
-    <div class="section-title">Nợ phải trả <button id="addDebtBtn">＋ Thêm</button></div>
+    <div class="section-title">Nợ vay trả góp <button id="addDebtBtn">＋ Thêm</button></div>
     <div class="collapse-form" id="debtForm">
-      <div class="field">
-        <label>Loại</label>
-        <select id="debtKind">
-          <option value="bnpl">🛒 Mua trước trả sau (Shopee, trả chậm ngày 10 tháng sau)</option>
-          <option value="loan">🏦 Vay trả góp</option>
-        </select>
-      </div>
       <div class="row field">
-        <div><label>Tên</label><input type="text" id="debtName" placeholder="VD: Đơn Shopee 11/11" /></div>
+        <div><label>Tên khoản vay</label><input type="text" id="debtName" placeholder="VD: Vay mua xe, Học phí..." /></div>
         <div><label>Số tiền/gốc</label><input type="number" id="debtPrincipal" inputmode="decimal" placeholder="0" /></div>
       </div>
-      <div class="row field" id="loanOnlyRow">
+      <div class="row field">
         <div><label>Lãi suất/năm (%)</label><input type="number" id="debtRate" inputmode="decimal" placeholder="0 nếu miễn lãi" value="0" /></div>
         <div>
           <label>Số kỳ trả (tháng)</label>
@@ -299,18 +384,28 @@
           </select>
         </div>
       </div>
-      <div class="field" id="bnplDateRow">
-        <label>Ngày mua</label>
-        <input type="date" id="debtPurchase" />
-        <div class="hint" style="font-size:.7rem;color:#94a3b8;margin-top:4px;">Mua trong tháng này → tổng hợp trả chậm nhất ngày 10 tháng sau.</div>
-      </div>
-      <div class="field" id="loanDateRow" style="display:none">
+      <div class="field">
         <label>Ngày bắt đầu trả</label>
         <input type="date" id="debtStart" />
       </div>
-      <button class="btn-primary" id="debtSave">Lưu khoản nợ</button>
+      <button class="btn-primary" id="debtSave">Lưu khoản vay</button>
     </div>
     <ul class="list" id="debtList"></ul>
+  </div>
+
+  <div class="card">
+    <div class="section-title">🛒 Đơn Shopee (mua trước trả sau) <button id="addOrdBtn">＋ Đơn</button></div>
+    <div class="hint" style="font-size:.7rem;color:#94a3b8;margin:0 2px 8px;">Nhập từng đơn lẻ. Đơn từ 24/X đến 23/(X+1) được gộp thành 1 kỳ, hạn trả ngày 10 của tháng kế tiếp.</div>
+    <div class="collapse-form" id="ordForm">
+      <div class="row field">
+        <div><label>Ngày mua</label><input type="date" id="ordDate" /></div>
+        <div><label>Số tiền đơn</label><input type="number" id="ordAmount" inputmode="decimal" placeholder="0" /></div>
+      </div>
+      <div class="field"><label>Ghi chú (mã đơn, món gì...)</label><input type="text" id="ordNote" placeholder="Không bắt buộc" /></div>
+      <div class="hint" id="ordHint" style="font-size:.7rem;color:#0f766e;background:#ccfbf1;border-radius:8px;padding:6px 8px;margin-bottom:10px;display:none;"></div>
+      <button class="btn-primary" id="ordSave">Lưu đơn</button>
+    </div>
+    <div id="stmtList"></div>
   </div>
 </section>
 
@@ -348,6 +443,7 @@
 <nav>
   <button class="active" data-tab="tx"><span class="ic">✍️</span>Giao dịch</button>
   <button data-tab="overview"><span class="ic">📊</span>Tổng quan</button>
+  <button data-tab="stats"><span class="ic">📅</span>Thống kê</button>
   <button data-tab="savings"><span class="ic">💰</span>Tiết kiệm</button>
   <button data-tab="debts"><span class="ic">🧾</span>Nợ</button>
   <button data-tab="income"><span class="ic">📈</span>Thu nhập</button>
@@ -438,15 +534,17 @@
 const LS_URL = 'finance_api_url';
 const LS_KEY = 'finance_api_key';
 
-const EXPENSE_CATS = ['Ăn uống', 'Di chuyển', 'Mua sắm', 'Hóa đơn & tiện ích', 'Sức khỏe', 'Giáo dục', 'Giải trí', 'Góp mục tiêu', 'Trả nợ', 'Khác'];
-const INCOME_CATS  = ['Lương', 'Thưởng', 'Cho thuê nhà', 'Đầu tư', 'Rút tiết kiệm', 'Khác'];
-const CAT_ICONS = { 'Ăn uống':'🍜','Di chuyển':'🛵','Mua sắm':'🛍️','Hóa đơn & tiện ích':'🧾','Sức khỏe':'💊','Giáo dục':'📚','Giải trí':'🎮','Góp mục tiêu':'🎯','Trả nợ':'🧾','Lương':'💼','Thưởng':'🎁','Cho thuê nhà':'🏠','Đầu tư':'📈','Chuyển tiền':'🔀','Rút tiết kiệm':'💰','Khác':'📝' };
+const EXPENSE_CATS = ['Ăn uống', 'Di chuyển', 'Mua sắm', 'Hóa đơn & tiện ích', 'Sức khỏe', 'Giáo dục', 'Giải trí', 'Góp mục tiêu', 'Trả nợ', 'Trả hộ', 'Khác'];
+const INCOME_CATS  = ['Lương', 'Thưởng', 'Cho thuê nhà', 'Đầu tư', 'Rút tiết kiệm', 'Nhận trả hộ', 'Khác'];
+const CAT_ICONS = { 'Ăn uống':'🍜','Di chuyển':'🛵','Mua sắm':'🛍️','Hóa đơn & tiện ích':'🧾','Sức khỏe':'💊','Giáo dục':'📚','Giải trí':'🎮','Góp mục tiêu':'🎯','Trả nợ':'🧾','Trả hộ':'🤝','Lương':'💼','Thưởng':'🎁','Cho thuê nhà':'🏠','Đầu tư':'📈','Chuyển tiền':'🔀','Rút tiết kiệm':'💰','Nhận trả hộ':'🤝','Khác':'📝' };
 const ACC_TYPE = { cash:{icon:'💵',label:'Tiền mặt'}, bank:{icon:'🏦',label:'Ngân hàng'}, ewallet:{icon:'📱',label:'Ví điện tử'}, saving:{icon:'🐷',label:'Tiết kiệm'}, invest:{icon:'📈',label:'Đầu tư'} };
 
 let state = {
   tab: 'tx', mode: 'expense', editingAccId: null,
   accounts: [], transactions: [], summary: null,
-  overview: null, savings: [], debts: [], incomes: [], alerts: []
+  overview: null, savings: [], debts: [], incomes: [], alerts: [],
+  report: null, history: [], calMonth: null, selDay: null,
+  statements: [], payingStatementKey: null
 };
 
 // ---------- Cấu hình ----------
@@ -462,10 +560,11 @@ function saveCfg(url, key) {
 async function api(action, data) {
   const { url, key } = getCfg();
   if (!url || !key) throw new Error('CHUA_CAU_HINH');
-  const getActions = ['list', 'overview', 'savings', 'debts', 'fixedIncomes', 'alerts'];
+  const getActions = ['list', 'overview', 'savings', 'debts', 'fixedIncomes', 'alerts', 'report', 'history', 'orders'];
   let res;
   if (getActions.indexOf(action) !== -1) {
-    res = await fetch(url + '?action=' + action + '&key=' + encodeURIComponent(key) + '&_ts=' + Date.now(), { method: 'GET' });
+    const extraQ = action === 'report' && data && data.month ? '&month=' + encodeURIComponent(data.month) : '';
+    res = await fetch(url + '?action=' + action + '&key=' + encodeURIComponent(key) + extraQ + '&_ts=' + Date.now(), { method: 'GET' });
   } else {
     res = await fetch(url, {
       method: 'POST',
@@ -512,7 +611,8 @@ function accountName(id) {
 // ---------- Tải dữ liệu ----------
 async function loadAll() {
   const results = await Promise.allSettled([
-    api('list'), api('overview'), api('savings'), api('debts'), api('fixedIncomes'), api('alerts')
+    api('list'), api('overview'), api('savings'), api('debts'), api('fixedIncomes'), api('alerts'),
+    api('report', { month: state.calMonth || today().slice(0, 7) }), api('history'), api('orders')
   ]);
   if (results[0].status === 'fulfilled') {
     const r = results[0].value;
@@ -529,6 +629,9 @@ async function loadAll() {
   if (results[3].status === 'fulfilled') { state.debts = results[3].value.items; renderDebts(); }
   if (results[4].status === 'fulfilled') { state.incomes = results[4].value.items; renderIncomes(); }
   if (results[5].status === 'fulfilled') { state.alerts = results[5].value.items || []; renderBell(); }
+  if (results[6].status === 'fulfilled') { state.report = results[6].value; state.calMonth = results[6].value.month; renderStats(); }
+  if (results[7].status === 'fulfilled') { state.history = results[7].value.items || []; renderTrend(); }
+  if (results[8].status === 'fulfilled') { state.statements = results[8].value.items || []; renderStatements(); renderDebts(); }
 }
 async function refresh() { try { await loadAll(); } catch (e) { toast('❌ ' + e.message); } }
 
@@ -657,7 +760,171 @@ function renderOverview() {
     : '<li class="empty">Chưa có chi tiêu nào tháng này.</li>';
 }
 
-// ---------- Tiết kiệm ----------
+// ---------- Thống kê: lịch + báo cáo ----------
+function monthLabel(m) {
+  const [y, mm] = m.split('-');
+  return 'Tháng ' + Number(mm) + '/' + y;
+}
+function shiftMonth(m, delta) {
+  const [y, mm] = m.split('-').map(Number);
+  const d = new Date(y, mm - 1 + delta, 1);
+  return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2);
+}
+async function loadReportMonth() {
+  try {
+    state.report = await api('report', { month: state.calMonth });
+    renderStats();
+  } catch (e) { toast('❌ ' + e.message); }
+}
+
+function renderCalendar() {
+  const r = state.report;
+  const grid = document.getElementById('calGrid');
+  const label = document.getElementById('calLabel');
+  if (!r) { grid.innerHTML = ''; return; }
+  label.textContent = monthLabel(r.month);
+  const [y, m] = r.month.split('-').map(Number);
+  const first = new Date(y, m - 1, 1);
+  const daysInMonth = new Date(y, m, 0).getDate();
+  // Thứ 2 = cột 0 (cal-head bắt đầu từ Hai)
+  let startCol = (first.getDay() + 6) % 7;
+  const todayS = today();
+  let html = '';
+  for (let i = 0; i < startCol; i++) html += '<div class="cal-day dim"></div>';
+  for (let d = 1; d <= daysInMonth; d++) {
+    const ds = r.month + '-' + ('0' + d).slice(-2);
+    const info = r.byDay[ds] || { expense: 0, income: 0 };
+    const cls = 'cal-day' + (ds === todayS ? ' today' : '') + (state.selDay === ds ? ' selected' : '');
+    html += '<div class="' + cls + '" data-day="' + ds + '">' +
+      '<span class="d">' + d + '</span>' +
+      (info.income ? '<span class="amt inc">+' + fmtShort(info.income) + '</span>' : '') +
+      (info.expense ? '<span class="amt exp">−' + fmtShort(info.expense) + '</span>' : '') +
+      '</div>';
+  }
+  grid.innerHTML = html;
+  grid.querySelectorAll('[data-day]').forEach(c => {
+    c.onclick = () => {
+      state.selDay = state.selDay === c.dataset.day ? null : c.dataset.day;
+      renderCalendar(); renderDayList();
+    };
+  });
+}
+function fmtShort(n) {
+  n = Number(n) || 0;
+  if (Math.abs(n) >= 1e9) return (n / 1e9).toFixed(1).replace('.0', '') + ' tỷ';
+  if (Math.abs(n) >= 1e6) return (n / 1e6).toFixed(1).replace('.0', '') + ' tr';
+  if (Math.abs(n) >= 1e3) return Math.round(n / 1e3) + 'k';
+  return String(Math.round(n));
+}
+
+function renderStats() {
+  const r = state.report;
+  if (!r) return;
+  document.getElementById('rpIncome').textContent = fmt(r.income);
+  document.getElementById('rpExpense').textContent = fmt(r.expense);
+  const net = document.getElementById('rpNet');
+  net.textContent = fmt(r.net);
+  net.style.color = r.net >= 0 ? 'var(--green)' : 'var(--red)';
+  document.getElementById('obPaid').textContent = fmt(r.onBehalf.paid);
+  document.getElementById('obReceived').textContent = fmt(r.onBehalf.received);
+  document.getElementById('obOutstanding').textContent = 'Chờ nhận: ' + fmt(r.onBehalf.outstanding);
+
+  const maxE = r.expenseByCategory.length ? r.expenseByCategory[0].amount : 1;
+  document.getElementById('rpExpCats').innerHTML = r.expenseByCategory.length
+    ? r.expenseByCategory.map(c =>
+        '<li class="item"><div class="it-info">' +
+        '<div class="name">' + (CAT_ICONS[c.name] || '📝') + ' ' + esc(c.name) + ' <span class="chip chip-gray">' + c.pct + '%</span></div>' +
+        '<div class="bar" style="margin-top:4px;height:6px;"><div style="width:' + Math.round(c.amount / maxE * 100) + '%;background:var(--red);"></div></div>' +
+        '</div><div class="it-amt amt-expense">' + fmt(c.amount) + '</div></li>').join('')
+    : '<li class="empty">Không có chi nào (loại trừ trả hộ).</li>';
+
+  const maxI = r.incomeByCategory.length ? r.incomeByCategory[0].amount : 1;
+  document.getElementById('rpIncCats').innerHTML = r.incomeByCategory.length
+    ? r.incomeByCategory.map(c =>
+        '<li class="item"><div class="it-info">' +
+        '<div class="name">' + (CAT_ICONS[c.name] || '📝') + ' ' + esc(c.name) + ' <span class="chip chip-gray">' + c.pct + '%</span></div>' +
+        '<div class="bar" style="margin-top:4px;height:6px;"><div style="width:' + Math.round(c.amount / maxI * 100) + '%;background:var(--green);"></div></div>' +
+        '</div><div class="it-amt amt-income">' + fmt(c.amount) + '</div></li>').join('')
+    : '<li class="empty">Không có thu nào (loại trừ nhận trả hộ).</li>';
+
+  document.getElementById('rpTop').innerHTML = r.topExpenses.length
+    ? r.topExpenses.map(t =>
+        '<li class="item"><div class="it-icon">' + (CAT_ICONS[t.Category] || '📝') + '</div>' +
+        '<div class="it-info"><div class="name">' + esc(t.Category) + '</div>' +
+        '<div class="meta">' + fmtDay(t.Date) + (t.Note ? ' · ' + esc(t.Note) : '') + '</div></div>' +
+        '<div class="it-amt amt-expense">' + fmt(t.Amount) + '</div></li>').join('')
+    : '<li class="empty">Chưa có giao dịch nào.</li>';
+
+  renderCalendar();
+  renderDayList();
+}
+
+function renderDayList() {
+  const r = state.report;
+  if (!r) return;
+  const ul = document.getElementById('dayList');
+  const title = document.getElementById('dayListTitle');
+  let txs = r.transactions;
+  if (state.selDay) {
+    txs = txs.filter(t => String(t.Date).slice(0, 10) === state.selDay);
+    title.textContent = 'Giao dịch ngày ' + fmtDay(state.selDay);
+  } else {
+    title.textContent = 'Giao dịch trong tháng';
+  }
+  if (!txs.length) { ul.innerHTML = '<li class="empty">Không có giao dịch nào.</li>'; return; }
+  ul.innerHTML = txs.map(t => {
+    const isOb = t.Category === 'Trả hộ' || t.Category === 'Nhận trả hộ';
+    const cls = t.Type === 'expense' ? 'amt-expense' : t.Type === 'income' ? 'amt-income' : 'amt-transfer';
+    const txt = t.Type === 'expense' ? '−' + fmt(t.Amount) : t.Type === 'income' ? '+' + fmt(t.Amount) : fmt(t.Amount);
+    return '<li class="item">' +
+      '<div class="it-icon">' + (CAT_ICONS[t.Category] || (t.Type === 'transfer' ? '🔀' : '📝')) + '</div>' +
+      '<div class="it-info"><div class="name">' + esc(t.Type === 'transfer' ? 'Chuyển tiền' : t.Category) +
+        (isOb ? ' <span class="chip chip-amber">hộ</span>' : '') + '</div>' +
+      '<div class="meta">' + fmtDay(t.Date) + ' · ' + esc(accountName(t.AccountId)) +
+        (t.Type === 'transfer' ? ' → ' + esc(accountName(t.ToAccountId)) : '') +
+        (t.Note ? ' · ' + esc(t.Note) : '') + '</div></div>' +
+      '<div class="it-amt ' + cls + '">' + txt + '</div></li>';
+  }).join('');
+}
+
+function renderTrend() {
+  const box = document.getElementById('trend');
+  if (!state.history.length) { box.innerHTML = '<div class="empty">Chưa đủ dữ liệu.</div>'; return; }
+  const maxV = Math.max.apply(null, state.history.map(h => Math.max(h.income, h.expense))) || 1;
+  box.innerHTML = state.history.map(h =>
+    '<div class="tcol"><div class="bars">' +
+    '<i class="bi" style="height:' + Math.max(2, Math.round(h.income / maxV * 84)) + 'px" title="Thu ' + fmt(h.income) + '"></i>' +
+    '<i class="be" style="height:' + Math.max(2, Math.round(h.expense / maxV * 84)) + 'px" title="Chi ' + fmt(h.expense) + '"></i>' +
+    '</div><span class="lbl">' + Number(h.month.slice(5, 7)) + '/' + h.month.slice(2, 4) + '</span>' +
+    '<span class="val" style="color:' + (h.net >= 0 ? 'var(--green)' : 'var(--red)') + '">' + fmtShort(h.net) + '</span></div>'
+  ).join('');
+}
+
+function exportCsv() {
+  const r = state.report;
+  if (!r || !r.transactions.length) { toast('Không có giao dịch để xuất'); return; }
+  const rows = [['Ngày', 'Loại', 'Danh mục', 'Tài khoản', 'Tới tài khoản', 'Số tiền', 'Ghi chú']];
+  r.transactions.forEach(t => {
+    rows.push([
+      String(t.Date).slice(0, 10), t.Type, t.Category,
+      accountName(t.AccountId), t.Type === 'transfer' ? accountName(t.ToAccountId) : '',
+      (t.Type === 'expense' ? -1 : 1) * (Number(t.Amount) || 0), t.Note || ''
+    ]);
+  });
+  const csv = '\uFEFF' + rows.map(row => row.map(c => {
+    const s = String(c == null ? '' : c);
+    return /[",;\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+  }).join(',')).join('\r\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+  a.download = 'vi-canhan-' + r.month + '.csv';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  toast('⬇ Đã xuất CSV tháng ' + monthLabel(r.month));
+}
+
+
 function savFiltered() {
   const from = document.getElementById('savFrom').value;
   const to = document.getElementById('savTo').value;
@@ -777,9 +1044,13 @@ async function saveSaving() {
 // ---------- Nợ ----------
 function renderDebts() {
   const active = state.debts.filter(d => d.Status !== 'done' && d.Remaining > 0);
-  const soon = active.filter(d => d.DaysToDue != null && d.DaysToDue <= 7).length;
-  document.getElementById('debtRemaining').textContent = fmt(active.reduce((s, d) => s + d.Remaining, 0));
-  document.getElementById('debtPaid').textContent = fmt(state.debts.reduce((s, d) => s + d.TotalPaid, 0));
+  const stmtActive = state.statements.filter(s => s.Status !== 'done' && s.Remaining > 0);
+  const soon = active.filter(d => d.DaysToDue != null && d.DaysToDue <= 7).length +
+    stmtActive.filter(s => s.DaysToDue != null && s.DaysToDue <= 7).length;
+  document.getElementById('debtRemaining').textContent =
+    fmt(active.reduce((s, d) => s + d.Remaining, 0) + stmtActive.reduce((s, x) => s + x.Remaining, 0));
+  document.getElementById('debtPaid').textContent =
+    fmt(state.debts.reduce((s, d) => s + d.TotalPaid, 0) + state.statements.reduce((s, x) => s + x.Paid, 0));
   document.getElementById('debtSoon').textContent = soon + ' khoản';
 
   const ul = document.getElementById('debtList');
@@ -819,9 +1090,21 @@ let payingDebtId = null;
 function openPayPanel(id, mode) {
   const d = state.debts.find(x => x.Id === id);
   payingDebtId = id;
+  state.payingStatementKey = null;
   document.getElementById('payPanelTitle').textContent = '🧾 Trả nợ: ' + d.Name +
     (mode === 'full' ? ' (chốt tất cả)' : '');
   document.getElementById('payAmount').value = mode === 'full' ? d.Remaining : d.MonthlyPayment;
+  document.getElementById('payDate').value = today();
+  const bankAcc = state.accounts.find(a => a.Type === 'bank') || state.accounts[0];
+  if (bankAcc) document.getElementById('payAccount').value = bankAcc.Id;
+  document.getElementById('payPanel').classList.add('open');
+}
+function openStatementPay(key) {
+  const s = state.statements.find(x => x.Key === key);
+  payingDebtId = null;
+  state.payingStatementKey = key;
+  document.getElementById('payPanelTitle').textContent = '🛒 Trả Shopee kỳ ' + s.Label;
+  document.getElementById('payAmount').value = s.Remaining;
   document.getElementById('payDate').value = today();
   const bankAcc = state.accounts.find(a => a.Type === 'bank') || state.accounts[0];
   if (bankAcc) document.getElementById('payAccount').value = bankAcc.Id;
@@ -833,14 +1116,25 @@ async function confirmPay() {
   btn.disabled = true;
   try {
     const amount = Number(document.getElementById('payAmount').value);
-    const r = await api('payDebt', {
-      id: payingDebtId,
-      amount: amount,
-      accountId: document.getElementById('payAccount').value,
-      date: document.getElementById('payDate').value
-    });
-    document.getElementById('payPanel').classList.remove('open');
-    toast(r.done ? '🎉 Đã chốt xong khoản nợ!' : '✅ Đã ghi nhận trả ' + fmt(amount));
+    if (state.payingStatementKey) {
+      const r = await api('payStatement', {
+        key: state.payingStatementKey,
+        amount: amount,
+        accountId: document.getElementById('payAccount').value,
+        date: document.getElementById('payDate').value
+      });
+      document.getElementById('payPanel').classList.remove('open');
+      toast(r.done ? '🎉 Đã trả xong kỳ Shopee này!' : '✅ Đã ghi nhận trả ' + fmt(amount));
+    } else {
+      const r = await api('payDebt', {
+        id: payingDebtId,
+        amount: amount,
+        accountId: document.getElementById('payAccount').value,
+        date: document.getElementById('payDate').value
+      });
+      document.getElementById('payPanel').classList.remove('open');
+      toast(r.done ? '🎉 Đã chốt xong khoản nợ!' : '✅ Đã ghi nhận trả ' + fmt(amount));
+    }
     refresh();
   } catch (e) { toast('❌ ' + e.message); }
   finally { btn.disabled = false; }
@@ -855,20 +1149,110 @@ async function saveDebt() {
   if (btn.disabled) return;
   btn.disabled = true;
   try {
-    const kind = document.getElementById('debtKind').value;
     const d = {
-      kind: kind,
+      kind: 'loan',
       name: document.getElementById('debtName').value.trim(),
       principal: Number(document.getElementById('debtPrincipal').value),
       annualRate: Number(document.getElementById('debtRate').value),
       termMonths: Number(document.getElementById('debtTerm').value),
-      startDate: kind === 'loan' ? document.getElementById('debtStart').value : '',
-      purchaseDate: kind === 'bnpl' ? document.getElementById('debtPurchase').value : ''
+      startDate: document.getElementById('debtStart').value,
+      purchaseDate: ''
     };
     if (!d.name || !d.principal) { toast('Nhập tên và số tiền'); btn.disabled = false; return; }
     await api('addDebt', d);
-    toast('✅ Đã thêm khoản nợ');
+    toast('✅ Đã thêm khoản vay');
     document.getElementById('debtForm').classList.remove('open');
+    refresh();
+  } catch (e) { toast('❌ ' + e.message); }
+  finally { btn.disabled = false; }
+}
+
+// ---------- Đơn Shopee mua trước trả sau ----------
+/** Tính client-side khóa kỳ + hạn trả để gợi ý ngay khi nhập ngày mua. */
+function ordCycleInfo(dateStr) {
+  if (!dateStr) return null;
+  const [y, m, d] = dateStr.split('-').map(Number);
+  let cy = y, cm = m;
+  if (d < 24) { cm = m === 1 ? 12 : m - 1; cy = m === 1 ? y - 1 : y; }
+  const end = new Date(cy, cm, 23);       // 23 của tháng (cm+1)
+  const due = new Date(cy, cm + 1, 10);   // 10 của tháng (cm+2)
+  const p2 = x => ('0' + x).slice(-2);
+  return {
+    label: '24/' + p2(cm) + '/' + cy + '–23/' + p2(end.getMonth() + 1) + '/' + end.getFullYear(),
+    due: p2(due.getDate()) + '/' + p2(due.getMonth() + 1) + '/' + due.getFullYear()
+  };
+}
+
+function renderStatements() {
+  const box = document.getElementById('stmtList');
+  if (!state.statements.length) {
+    box.innerHTML = '<div class="empty">Chưa có đơn Shopee nào.</div>';
+    return;
+  }
+  box.innerHTML = state.statements.map(s => {
+    const done = s.Status === 'done' || s.Remaining <= 0;
+    let chip;
+    if (done) chip = '<span class="chip chip-green">✅ Đã trả xong</span>';
+    else if (s.Overdue) chip = '<span class="chip chip-red">⚠️ Quá hạn ' + (-s.DaysToDue) + ' ngày</span>';
+    else if (s.DaysToDue <= 3) chip = '<span class="chip chip-red">còn ' + s.DaysToDue + ' ngày</span>';
+    else chip = '<span class="chip chip-amber">còn ' + s.DaysToDue + ' ngày (' + fmtDay(s.DueDate) + ')</span>';
+    const pct = s.Total > 0 ? Math.min(100, Math.round(s.Paid / s.Total * 100)) : 100;
+    const ordersHtml = s.Orders.map(o =>
+      '<li class="item" style="padding:6px 2px;">' +
+      '<div class="it-icon" style="width:30px;height:30px;font-size:.85rem;">📦</div>' +
+      '<div class="it-info"><div class="name" style="font-size:.78rem;">' + esc(o.Note || 'Đơn hàng') +
+        (o.Status !== 'active' ? ' <span class="chip chip-gray">đã hủy</span>' : '') + '</div>' +
+      '<div class="meta">Mua ' + fmtDay(o.Date) + '</div></div>' +
+      '<div class="it-amt" style="font-size:.78rem;' + (o.Status !== 'active' ? 'color:#cbd5e1;text-decoration:line-through;' : '') + '">' + fmt(o.Amount) + '</div>' +
+      (o.Status === 'active'
+        ? '<button class="btn-small btn-red" data-cancel-ord="' + esc(o.Id) + '">Hủy</button>'
+        : '<button class="btn-small btn-teal" data-uncancel-ord="' + esc(o.Id) + '">Bỏ hủy</button>') +
+      '</li>').join('');
+    return '<div class="card" style="margin-bottom:10px;padding:12px;">' +
+      '<div class="it-info" style="flex:1;">' +
+        '<div class="name" style="justify-content:space-between;">' +
+          '<span>🛒 Kỳ ' + s.Label + ' · ' + s.OrderCount + ' đơn</span>' + chip + '</div>' +
+        '<div class="meta">Hạn trả: ' + fmtDay(s.DueDate) + ' · Tổng ' + fmt(s.Total) +
+          ' · Đã trả ' + fmt(s.Paid) + ' · Còn ' + fmt(s.Remaining) + '</div>' +
+        '<div class="bar ' + (pct >= 100 ? 'bar-green' : pct >= 50 ? 'bar-amber' : 'bar-red') + '" style="margin-top:6px;height:6px;">' +
+          '<div style="width:' + pct + '%"></div></div>' +
+      '</div>' +
+      '<ul class="list" style="margin-top:6px;">' + ordersHtml + '</ul>' +
+      (done ? '' : '<button class="btn-primary" style="margin-top:10px;padding:10px;" data-paystmt="' + esc(s.Key) + '">Trả kỳ này (' + fmt(s.Remaining) + ')</button>') +
+      '</div>';
+  }).join('');
+  box.querySelectorAll('[data-paystmt]').forEach(b => { b.onclick = () => openStatementPay(b.dataset.paystmt); });
+  box.querySelectorAll('[data-cancel-ord]').forEach(b => {
+    b.onclick = async () => {
+      if (!confirm('Hủy đơn này? Nó sẽ bị loại khỏi tổng kỳ phải trả.')) return;
+      try { await api('cancelOrder', { id: b.dataset.cancelOrd }); toast('🗑️ Đã hủy đơn'); refresh(); }
+      catch (e) { toast('❌ ' + e.message); }
+    };
+  });
+  box.querySelectorAll('[data-uncancel-ord]').forEach(b => {
+    b.onclick = async () => {
+      try { await api('cancelOrder', { id: b.dataset.uncancelOrd, reactivate: true }); toast('↩️ Đã khôi phục đơn'); refresh(); }
+      catch (e) { toast('❌ ' + e.message); }
+    };
+  });
+}
+
+async function saveOrder() {
+  const btn = document.getElementById('ordSave');
+  if (btn.disabled) return;
+  btn.disabled = true;
+  try {
+    const amount = Number(document.getElementById('ordAmount').value);
+    if (!amount || amount <= 0) { toast('Nhập số tiền đơn'); btn.disabled = false; return; }
+    await api('addOrder', {
+      date: document.getElementById('ordDate').value,
+      amount: amount,
+      note: document.getElementById('ordNote').value.trim()
+    });
+    toast('✅ Đã thêm đơn');
+    document.getElementById('ordAmount').value = '';
+    document.getElementById('ordNote').value = '';
+    document.getElementById('ordForm').classList.remove('open');
     refresh();
   } catch (e) { toast('❌ ' + e.message); }
   finally { btn.disabled = false; }
@@ -1046,23 +1430,44 @@ document.getElementById('savTo').onchange = renderSavings;
 document.getElementById('wdSave').onclick = confirmWithdraw;
 
 document.getElementById('addDebtBtn').onclick = () => {
-  document.getElementById('debtPurchase').value = today();
   document.getElementById('debtStart').value = today();
   document.getElementById('debtForm').classList.toggle('open');
 };
-document.getElementById('debtKind').onchange = () => {
-  const isBnpl = document.getElementById('debtKind').value === 'bnpl';
-  document.getElementById('bnplDateRow').style.display = isBnpl ? '' : 'none';
-  document.getElementById('loanDateRow').style.display = isBnpl ? 'none' : '';
-};
 document.getElementById('debtSave').onclick = saveDebt;
 document.getElementById('paySave').onclick = confirmPay;
+
+document.getElementById('addOrdBtn').onclick = () => {
+  document.getElementById('ordDate').value = today();
+  document.getElementById('ordHint').style.display = 'none';
+  document.getElementById('ordForm').classList.toggle('open');
+};
+document.getElementById('ordDate').onchange = () => {
+  const info = ordCycleInfo(document.getElementById('ordDate').value);
+  const hint = document.getElementById('ordHint');
+  if (info) {
+    hint.style.display = '';
+    hint.textContent = '📌 Đơn này thuộc kỳ ' + info.label + ' → hạn trả ngày 10/' + info.due.split('/')[1] + '/' + info.due.split('/')[2] + ' (' + info.due + ')';
+  } else hint.style.display = 'none';
+};
+document.getElementById('ordSave').onclick = saveOrder;
 
 document.getElementById('addIncBtn').onclick = () => {
   document.getElementById('incStart').value = today();
   document.getElementById('incForm').classList.toggle('open');
 };
 document.getElementById('incSave').onclick = saveIncome;
+
+document.getElementById('calPrev').onclick = () => {
+  state.calMonth = shiftMonth(state.calMonth || today().slice(0, 7), -1);
+  state.selDay = null;
+  loadReportMonth();
+};
+document.getElementById('calNext').onclick = () => {
+  state.calMonth = shiftMonth(state.calMonth || today().slice(0, 7), 1);
+  state.selDay = null;
+  loadReportMonth();
+};
+document.getElementById('csvBtn').onclick = exportCsv;
 
 // ---------- Khởi động ----------
 document.getElementById('date').value = today();
